@@ -3,3 +3,4 @@ pandas
 telebot
 pyTelegramBotAPI          
 aiogram 
+xlrd
