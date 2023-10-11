@@ -1,3 +1,5 @@
+#Файл с примерами кода для ctr+C ctr+V
+
 import telebot
 import time
 import aiogram
