@@ -12,6 +12,7 @@ def start(message):
 
 def start_2(message):
     bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id - 1, text='вы ввели ' + message.text)
+    
 @tb.message_handler(func=lambda m: True)
 def echo_all(message):
     try:
@@ -34,5 +35,5 @@ bot.send_message(message.chat.id, '~Зачёркнутый~', parse_mode='Markdo
 
 rom aiogram.utils.markdown import hlink
 
-hello_with_url = hlink('Привіт', 'https://pypi.org/project/pyTelegramBotAPI/#description')
+hello_with_url = hlink('Привет', 'https://pypi.org/project/pyTelegramBotAPI/#description')
 bot.send_message(message.chat.id ,f'{hello_with_url}, я чат-бот ', reply_markup=markup,parse_mode='HTML')
