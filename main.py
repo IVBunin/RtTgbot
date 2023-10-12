@@ -3,7 +3,7 @@
 #!!! не импортировать библиотеки from lib import * !!! 
 from tqdm import tqdm
 import asyncio
-import xlrd
+import xlrd 
 import random
 import config as cfg
 import prompts as prompt
@@ -111,7 +111,7 @@ async def reg(message):
     if message.text == 'sticker':
         await bot.send_sticker(id, 'CAACAgIAAxkBAAJGmGUoBkAbKeKzEaCZmZcxbGYbK280AAJ4IQACnByASozXcJvrjGo_MAQ')
     #Обработка ошибок        
-    if (message.text not in list(dict_answ.keys())) & (message.text != 'Тестовый вывод') & (message.text != 'Статус заявки') & (message.text != 'Возможность до адреса'):
+    if (message.text not in rows_list) & (message.text != 'Тестовый вывод') & (message.text != 'Статус заявки') & (message.text != 'Возможность до адреса'):
         await bot.send_message(id, 'Проверьте корректность')
 
 
