@@ -93,26 +93,29 @@ async def task_chek(message):
 
 @bot.message_handler(func=lambda message: True)
 async def reg(message):
-    id = message.chat.id
-    txt =('('+ str(id)+')' + str(message.chat.username) + ' : ' +str(message.text))
-    integ = random.randint(0,sheet.nrows)
-    row = sheet.cell_value(rowx=integ, colx=1)
-    await writelog(txt) 
-    if message.text == 'Тестовый вывод':
-        await bot.send_message(id, row)
-    if message.text == 'Статус заявки':
-        await bot.send_message(id,prompt.text_enter_application)
-    if message.text == 'Возможность до адреса':
-        await bot.send_message(id,prompt.text_enter_address)
-    for k, v in dict_answ.items():
-        if message.text == k:
-            await bot.send_message(id, "Ваша заявка - " + v)
-            await writelog("BOT: Ваша заявка - " + v)
-    if message.text == 'sticker':
-        await bot.send_sticker(id, 'CAACAgIAAxkBAAJGmGUoBkAbKeKzEaCZmZcxbGYbK280AAJ4IQACnByASozXcJvrjGo_MAQ')
+    try:
+        id = message.chat.id
+        txt =('('+ str(id)+')' + str(message.chat.username) + ' : ' +str(message.text))
+        integ = random.randint(0,sheet.nrows)
+        row = sheet.cell_value(rowx=integ, colx=1)
+        await writelog(txt) 
+        if message.text == 'Тестовый вывод':
+            await bot.send_message(id, row)
+        if message.text == 'Статус заявки':
+            await bot.send_message(id,prompt.text_enter_application)
+        if message.text == 'Возможность до адреса':
+            await bot.send_message(id,prompt.text_enter_address)
+        for k, v in dict_answ.items():
+            if message.text == k:
+                await bot.send_message(id, "Ваша заявка - " + v)
+                await writelog("BOT: Ваша заявка - " + v)
+        if message.text == 'sticker':
+            await bot.send_sticker(id, 'CAACAgIAAxkBAAJGmGUoBkAbKeKzEaCZmZcxbGYbK280AAJ4IQACnByASozXcJvrjGo_MAQ')
     #Обработка ошибок        
-    if (message.text not in rows_list) & (message.text != 'Тестовый вывод') & (message.text != 'Статус заявки') & (message.text != 'Возможность до адреса'):
-        await bot.send_message(id, 'Проверьте корректность')
+        if (message.text not in rows_list) & (message.text != 'Тестовый вывод') & (message.text != 'Статус заявки') & (message.text != 'Возможность до адреса'):
+            await bot.send_message(id, 'Проверьте корректность')
+    except ApiTelegramException as e:
+        pass
 
 
 
