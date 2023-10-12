@@ -3,7 +3,7 @@
 #!!! не импортировать библиотеки from lib import * !!! 
 
 import asyncio
-import xlrd
+import xlrd 
 import random
 import config as cfg
 import prompts as prompt
