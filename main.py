@@ -36,7 +36,7 @@ async def send_welcome(message):
         btn2 = types.KeyboardButton('Тестовый вывод')
         markup.add(btn0, btn1, btn2)
 #Попробовать перенести текст из этой части с сохранением функции обращения
-        bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот компании Ростелеком, в нем вы можете проверить возможность до адреса и статус вашей заявки".format(message.from_user),reply_markup=markup)
+        await bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот компании Ростелеком, в нем вы можете проверить возможность до адреса и статус вашей заявки".format(message.from_user),reply_markup=markup)
     except ApiTelegramException as e:
         pass 
 #Пока не функциональный код, надо решить{
@@ -67,13 +67,31 @@ async def reg(message):
     sheet = spreadsheet.sheet_by_index(0)
     integ = random.randint(0,sheet.nrows-3)
     row = sheet.cell_value(rowx=integ, colx=1)
-    print(row, integ)
+    
+
     if message.text == 'Тестовый вывод':
         await bot.send_message(id, row)
     if message.text == 'Статус заявки':
         await bot.send_message(id,prompt.text_enter_application)
     if message.text == 'Возможность до адреса':
         await bot.send_message(id,prompt.text_enter_address)
+    
+    # Вывод значений по заявке. Чтение файла, запись в список. Лучше сделать словарём, но пока работает и так.
+    rows_list=[]
+    for rownum in range(sheet.nrows-1):
+            rows_list.append(sheet.cell_value(rownum,colx=1))
+    print(rows_list)
+    if message.text in rows_list:
+        j=0
+        for i in rows_list:
+            if message.text == i:
+                print(message.text)
+                await bot.send_message(id, "Ваша заявка - " + sheet.cell_value(rowx=j, colx=2))
+                print(row, integ)
+            j+=1
+    #Обработка ошибок        
+    if (message.text not in rows_list) & (message.text != 'Тестовый вывод') & (message.text != 'Статус заявки') & (message.text != 'Возможность до адреса'):
+        await bot.send_message(id, 'Проверьте корректность')
 
 
 
