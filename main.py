@@ -59,40 +59,42 @@ async def task_chek(message):
 #Обработка текстовых команд без /  с вводом с кнопок в начале 
 @bot.message_handler(func=lambda message: True)
 async def reg(message):
-    id = message.chat.id
-    txt =('('+ str(id)+')' + message.chat.username + ' : ' +str(message.text))
-    await writelog(txt) 
+    try:
+        id = message.chat.id
+        txt =('('+ str(id)+')' + message.chat.username + ' : ' +str(message.text))
+        await writelog(txt) 
     
-    spreadsheet = xlrd.open_workbook('1.xls', formatting_info=True)
-    sheet = spreadsheet.sheet_by_index(0)
-    integ = random.randint(0,sheet.nrows-3)
-    row = sheet.cell_value(rowx=integ, colx=1)
+        spreadsheet = xlrd.open_workbook('1.xls', formatting_info=True)
+        sheet = spreadsheet.sheet_by_index(0)
+        integ = random.randint(0,sheet.nrows-3)
+        row = sheet.cell_value(rowx=integ, colx=1)
     
 
-    if message.text == 'Тестовый вывод':
-        await bot.send_message(id, row)
-    if message.text == 'Статус заявки':
-        await bot.send_message(id,prompt.text_enter_application)
-    if message.text == 'Возможность до адреса':
-        await bot.send_message(id,prompt.text_enter_address)
+        if message.text == 'Тестовый вывод':
+            await bot.send_message(id, row)
+        if message.text == 'Статус заявки':
+            await bot.send_message(id,prompt.text_enter_application)
+        if message.text == 'Возможность до адреса':
+            await bot.send_message(id,prompt.text_enter_address)
     
     # Вывод значений по заявке. Чтение файла, запись в список. Лучше сделать словарём, но пока работает и так.
-    rows_list=[]
-    for rownum in range(sheet.nrows-1):
+        rows_list=[]
+        for rownum in range(sheet.nrows-1):
             rows_list.append(sheet.cell_value(rownum,colx=1))
-    print(rows_list)
-    if message.text in rows_list:
-        j=0
-        for i in rows_list:
-            if message.text == i:
-                print(message.text)
-                await bot.send_message(id, "Ваша заявка - " + sheet.cell_value(rowx=j, colx=2))
-                print(row, integ)
-            j+=1
+        print(rows_list)
+        if message.text in rows_list:
+            j=0
+            for i in rows_list:
+                if message.text == i:
+                    print(message.text)
+                    await bot.send_message(id, "Ваша заявка - " + sheet.cell_value(rowx=j, colx=2))
+                    print(row, integ)
+                j+=1
     #Обработка ошибок        
-    if (message.text not in rows_list) & (message.text != 'Тестовый вывод') & (message.text != 'Статус заявки') & (message.text != 'Возможность до адреса'):
-        await bot.send_message(id, 'Проверьте корректность')
-
+        if (message.text not in rows_list) & (message.text != 'Тестовый вывод') & (message.text != 'Статус заявки') & (message.text != 'Возможность до адреса'):
+            await bot.send_message(id, 'Проверьте корректность')
+    except ApiTelegramException as e:
+        pass 
 
 
 
