@@ -6,3 +6,6 @@ telebot
 pyTelegramBotAPI          
 aiogram 
 xlrd
+
+beautifulsoup4
+equests
