@@ -1,7 +1,6 @@
 # основной файл бота без сложной логики 
 
 #!!! не импортировать библиотеки from lib import * !!! 
-from tqdm import tqdm
 import asyncio
 import xlrd 
 import random
