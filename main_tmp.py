@@ -13,8 +13,8 @@ import prompts as prompt
 bot = telebot.TeleBot(cfg._TOKEN_)
 
 def rand_speed():
-    speed_list = (10,100,300)
-    return speed_list(randint(0,2))
+    speed_list = ["10","100","300"]
+    return speed_list[randint(0,2)]
     
 
 @bot.message_handler(commands=['help', 'start'])
@@ -39,10 +39,11 @@ def comand_handler(message):
         pass
 
 def adres_output(message):
-     if "Ул" or "ул" or "УЛ" in message.text:
-        bot.send_message(id, text = f"По вашему алресу максимальная скорость = {rand_speed()}")
+     message_list = message.text.split()
+     if ("Ул" or "ул" or "УЛ") in message_list:
+        bot.send_message(message.chat.id, text = f"По вашему адресу максимальная скорость = {rand_speed()}")
      else:
-        bot.send_message(id, text = "Неверный формат адреса")
+        bot.send_message(message.chat.id, text = "Неверный формат адреса")
         
     
 
