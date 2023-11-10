@@ -35,7 +35,7 @@ tb.polling(none_stop=True, timeout=123)
 bot.send_message(message.chat.id, '__Нижнее подчёркивание__', parse_mode='MarkdownV2')
 bot.send_message(message.chat.id, '~Зачёркнутый~', parse_mode='MarkdownV2')
 
-rom aiogram.utils.markdown import hlink
+from aiogram.utils.markdown import hlink
 
 hello_with_url = hlink('Привет', 'https://pypi.org/project/pyTelegramBotAPI/#description')
 bot.send_message(message.chat.id ,f'{hello_with_url}, я чат-бот ', reply_markup=markup,parse_mode='HTML')
