@@ -5,7 +5,7 @@ import config as cfg
 from telebot import types
 from telebot.apihelper import ApiTelegramException
 from telebot.async_telebot import AsyncTeleBot
-
+from main_logic import * #Тут можно 
 #Желательно весь ввод проводить через перекодирование в utf-8 иначе при вводе незнакомых символов будет краш
 #Или обработать исключение
 
