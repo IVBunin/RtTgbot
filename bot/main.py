@@ -18,10 +18,13 @@ async def send_welcome(message):
     try:
         #Кнопки 
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        btn0 = types.KeyboardButton('Статус заявки')
-        btn1 = types.KeyboardButton('Возможность до адреса')
-        btn2 = types.KeyboardButton('Тестовый вывод')
-        markup.add(btn0, btn1, btn2)
+        btn0 = types.KeyboardButton('тарифы, акции и услуги')
+        btn1 = types.KeyboardButton('Информационные услуги')
+        btn2 = types.KeyboardButton('Информационные услуги 2')
+        btn3 = types.KeyboardButton('?')
+        btn4 = types.KeyboardButton('<=')
+        btn5 = types.KeyboardButton('✉️')
+        markup.add(btn0, btn1, btn2, btn3, btn4, btn5)
         await bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот компании Ростелеком, в нем вы можете проверить возможность до адреса и статус вашей заявки".format(message.from_user),reply_markup=markup)
     except ApiTelegramException as e:
         raise(Exception)
@@ -30,37 +33,35 @@ async def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 async def reg(message):
     try:
-        if message.text == "Информационные услуги":
-            bot.send_message(message.chat.id, text = " ", reply_markup=markup)
-            bot.register_next_step_handler(message, function_choise)
-
-        if message.text == "Услуги продаж":
-            bot.send_message(message.chat.id, text = " ", reply_markup=markup)
-            bot.register_next_step_handler(message, start)
-
-    except ApiTelegramException as e:
-        raise(Exception)
-
-
-@bot.message_handler(func=lambda message: True)
-async def function_choise(message):
-    try:
         if message.text == "тарифы, акции и услуги":
-            bot.send_message(message.chat.id, text = " ", reply_markup=markup)
-            bot.register_next_step_handler(message, function_choise)
+            await bot.send_message(message.chat.id, text = "a1")
 
         if message.text == "Информационные услуги":
-            bot.send_message(message.chat.id, text = " ", reply_markup=markup)
-            bot.register_next_step_handler(message, start)
+            await bot.send_message(message.chat.id, text = " a2")
 
-        if message.text == "Информационные услуги":
-            bot.send_message(message.chat.id, text = " ",reply_markup=markup)
-    
+        if message.text == "Информационные услуги 2":
+            await bot.send_message(message.chat.id, text = " 3")
+
+        if message.text == "<=":
+            await bot.send_message(message.chat.id, text = "a4 ")
+
+        if message.text == "?":
+            await bot.send_message(message.chat.id, text = " a5")
+
+        if message.text == "✉️":
+            await bot.send_message(message.chat.id, text = " a6")
+
+        if message.text == "3":
+            await bot.send_message(message.chat.id, text = "b7 ")
+
+        if message.text == "2":
+            await bot.send_message(message.chat.id, text = "b8 ")
+
+        if message.text == "1":
+           await bot.send_message(message.chat.id, text = "b9 ")
+
     except ApiTelegramException as e:
         raise(Exception)
-
-
-
-
+        
 
 asyncio.run(bot.polling())
