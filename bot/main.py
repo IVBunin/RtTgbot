@@ -51,17 +51,8 @@ async def reg(message):
         if message.text == "✉️":
             await bot.send_message(message.chat.id, text = " a6")
 
-        if message.text == "3":
-            await bot.send_message(message.chat.id, text = "b7 ")
-
-        if message.text == "2":
-            await bot.send_message(message.chat.id, text = "b8 ")
-
-        if message.text == "1":
-           await bot.send_message(message.chat.id, text = "b9 ")
-
     except ApiTelegramException as e:
         raise(Exception)
         
-
-asyncio.run(bot.polling())
+if __name__ == "__main__":
+    asyncio.run(bot.polling())
