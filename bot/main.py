@@ -19,7 +19,7 @@ async def send_welcome(message):
         #Кнопки 
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn0 = types.KeyboardButton('тарифы, акции и услуги')
-        btn1 = types.KeyboardButton('Информационные услуги')
+        btn1 = types.KeyboardButton('Возможность до адреса')
         markup.add(btn0, btn1)
         await bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот компании Ростелеком, в нем вы можете проверить возможность до адреса и узнать о тарифах".format(message.from_user),reply_markup=markup)
     except ApiTelegramException as e:
@@ -39,19 +39,20 @@ async def reg(message):
     except ApiTelegramException as e:
         print(e)
 
+
 @bot.message_handler(func=lambda message: True)
 async def serch_in_db_adress(message):
-    try:    
-        options_for_address = serch_in_db(message.text,address)
-        await bot.send_message(message.chat.id, text = f"Тарифы для вашего адреса = {options_for_address}")
+    try:
+# 0 - параметр для вывода адреса
+        await bot.send_message(message.chat.id, text = f"Тарифы для вашего адреса = {serch_in_db(message.text,0)}")
     except ApiTelegramException as e:
         print(e)
 
 @bot.message_handler(func=lambda message: True)
 async def serch_in_db_adress(message):
-    try:    
-        options= serch_in_db(message.text,option)
-        await bot.send_message(message.chat.id, text = f"Тарифы = {options}")
+    try:
+# 1 - параметр для вывода тарифов
+        await bot.send_message(message.chat.id, text = f"Тарифы = {serch_in_db( "void", 1)}")
     except ApiTelegramException as e:
         print(e)
 
