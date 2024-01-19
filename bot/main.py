@@ -52,7 +52,7 @@ async def serch_in_db_adress(message):
 async def serch_in_db_adress(message):
     try:
 # 1 - параметр для вывода тарифов
-        await bot.send_message(message.chat.id, text = f"Тарифы = {serch_in_db( "void", 1)}")
+        await bot.send_message(message.chat.id, text = f"Тарифы = {serch_in_db( 'void', 1)}")
     except ApiTelegramException as e:
         print(e)
 
