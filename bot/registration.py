@@ -9,7 +9,7 @@ from time import sleep
 
 
 # создание файла базы
-def base_init(base_name :str):
+def reg_init(base_name :str):
     try:
         if not(path.isdir("data/base/")):
             mkdir("data/base/")
@@ -23,7 +23,7 @@ def base_init(base_name :str):
 
 
 #удаление файла базы 
-def clear_base(password :str , base_name :str, clear_all = False):
+def clear_reg(password :str , base_name :str, clear_all = False):
     try:
         if password == config.master_password:
             match(clear_all):
@@ -36,9 +36,6 @@ def clear_base(password :str , base_name :str, clear_all = False):
     except Exception as e:
         return e
 
-
-# получение из базы имени или чат id  
-# нужно указать что хотим получить и по чему будем искать
 
 #регистрация пользователя
 def register_user( base_name :str, user_name :str, chat_id:str):
@@ -55,14 +52,22 @@ def register_user( base_name :str, user_name :str, chat_id:str):
         return e
 
 
-def test(clear):
-    print(base_init("new"))
-    print(register_user("new","first", "123456"))
-    print(register_user("new","second", "123456"))
-    print(register_user("new","third", "123456"))
-    print(register_user("new","forth", "123456"))
-    sleep(10)  # import time
-    if clear == True:
-        print(clear_base("qwerty123", "new"))
+# получение из базы имени или чат id  
+# нужно указать имя базы тип по которому ищем *имя или чат айди* и сам предмет
+def get_from_reg( base_name :str, type_ :str, request :str):
+    try:
 
-test(False)
+        base = open(f"data/base/{base_name}.json", "r")
+        data = json.load(base)
+        
+        match (type_):
+            case ("name"):
+                return data["items"][request]
+
+            case ("chat_id"):
+                for key,value in data["items"].items():
+                    if request == value:
+                        return key
+
+    except Exception as e :
+        return e
