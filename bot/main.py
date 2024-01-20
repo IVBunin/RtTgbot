@@ -29,13 +29,11 @@ async def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 async def reg(message):
     try:
-
         if message.text == "тарифы, акции и услуги":
             await bot.send_message(message.chat.id, text = "Введите тариф")
 
         if message.text == "Возможность до адреса":
-            await bot.send_message(message.chat.id, text = "Введите адрес")
-            
+            await bot.send_message(message.chat.id, text = "Введите адрес в формате \"Уссурийск г.,Выгонная,16,121\" ")
     except ApiTelegramException as e:
         print(e)
 
