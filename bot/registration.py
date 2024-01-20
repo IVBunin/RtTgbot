@@ -5,7 +5,7 @@ from os import remove
 from config import master_password
 import config
 import json
-from time import sleep
+
 
 
 # создание файла базы
@@ -28,7 +28,7 @@ def clear_reg(password :str , base_name :str, clear_all = False):
         if password == config.master_password:
             match(clear_all):
                 case(False):
-                    remove(f"data/base/{base_name + ".json"}")
+                    remove(f'data/base/{base_name + ".json"}')
                     return 0
                 case (True):
                     rmtree(f"data/base/")
@@ -71,3 +71,12 @@ def get_from_reg( base_name :str, type_ :str, request :str):
 
     except Exception as e :
         return e
+
+
+def debug(base_name):
+    base = open(f"data/base/{base_name}.json", "r")
+    data = json.load(base)
+    print(data)
+
+
+
