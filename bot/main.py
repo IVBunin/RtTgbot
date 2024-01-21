@@ -1,15 +1,23 @@
 # основной файл бота без сложной логики 
-#!!! не импортировать библиотеки from lib import * !!! 
+#!!! не импортировать сторонние библиотеки только конкретные функции библиотеки from lib import * !!! 
+
 import asyncio
 import config as cfg
 from telebot import types
 from telebot.apihelper import ApiTelegramException
 from telebot.async_telebot import AsyncTeleBot
 from datetime import datetime
+
 #самописные библиотеки импортируем польностью 
 from registration import * 
-from main_logic import *
+from readexcel import *
+
+
+#модули для дебага 
 from time import sleep
+
+#^^^^
+
 #Желательно весь ввод проводить через перекодирование в utf-8 иначе при вводе незнакомых символов будет краш
 #Или обработать исключение
 
@@ -39,24 +47,20 @@ async def reg(message):
             case ("тарифы, акции и услуги"):
                 await bot.send_message(message.chat.id, text = "Введите тариф")
             case ("Возможность до адреса"):
-                await bot.send_message(message.chat.id, text = "Введите адрес")
+                await bot.send_message(message.chat.id, text = "Введите адрес в формате \"Уссурийск г.,Выгонная,16,121\" ")
             case ("Регистрация"):
-                register_user("new_base",message.from_user.first_name, str(message.chat.id))
+                register_user(basename,message.from_user.first_name, str(message.chat.id))
                 await bot.send_message(message.chat.id, text = "Вы зарегистрированны")
     except ApiTelegramException as e:
         print(e)
 
 
-
-
-
-
 if __name__ == "__main__":
-    char = [':','.','+'' ']
+    basename = str(datetime.today())
+    char = [':','.','+',' ']
     for i in range(len(char)):
-        basename = str(datetime.today())
         basename= basename.replace(char[i],'_')
-    print(reg_init(basename))
+    reg_init(basename)
     asyncio.run(bot.polling())
 
     

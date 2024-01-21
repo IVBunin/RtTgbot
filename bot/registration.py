@@ -11,10 +11,10 @@ import json
 # создание файла базы
 def reg_init(base_name :str):
     try:
-        if not(path.isdir("data/base/")):
-            mkdir("data/base/")
+        if not(path.isdir("bot/data/base/")):
+            mkdir("bot/data/base/")
         data = {"items": {}}
-        base = open(f"data/base/{base_name}.json", "w")
+        base = open(f"bot/data/base/{base_name}.json", "w")
         json.dump(data, base)
         base.close
         return 0
@@ -28,10 +28,10 @@ def clear_reg(password :str , base_name :str, clear_all = False):
         if password == config.master_password:
             match(clear_all):
                 case(False):
-                    remove(f'data/base/{base_name + ".json"}')
+                    remove(f'bot/data/base/{base_name + ".json"}')
                     return 0
                 case (True):
-                    rmtree(f"data/base/")
+                    rmtree(f"bot/data/base/")
                     return 1 
     except Exception as e:
         return e
@@ -40,10 +40,10 @@ def clear_reg(password :str , base_name :str, clear_all = False):
 #регистрация пользователя
 def register_user( base_name :str, user_name :str, chat_id:str):
     try:
-        base = open(f"data/base/{base_name}.json", "r")
+        base = open(f"bot/data/base/{base_name}.json", "r")
         data = json.load(base)
         base.close
-        base = open(f"data/base/{base_name}.json", "w")
+        base = open(f"bot/data/base/{base_name}.json", "w")
         data["items"][user_name] = chat_id
         json.dump(data, base)
         base.close
@@ -57,7 +57,7 @@ def register_user( base_name :str, user_name :str, chat_id:str):
 def get_from_reg( base_name :str, type_ :str, request :str):
     try:
 
-        base = open(f"data/base/{base_name}.json", "r")
+        base = open(f"bot/data/base/{base_name}.json", "r")
         data = json.load(base)
         
         match (type_):
@@ -74,9 +74,10 @@ def get_from_reg( base_name :str, type_ :str, request :str):
 
 
 def debug(base_name):
-    base = open(f"data/base/{base_name}.json", "r")
+    base = open(f"bot/data/base/{base_name}.json", "r")
     data = json.load(base)
     print(data)
 
 
-
+reg_init("test")
+debug("test")
