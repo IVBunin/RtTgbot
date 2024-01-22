@@ -29,13 +29,13 @@ data
 > token - токен телеграм бота  
 > master_password - пароль используемый для отладочных действий  
 > _LOCAL_PATH_ - путь для коректного чтения и сохранения файлов 
-### <a id="config">GPT.py</a>  
+### <a id="GPT">GPT.py</a>  
 Модуль для интеграции ChatGPT3.5 
 >
-### <a id="config">Readexcell.py</a>  
+### <a id="excell">Readexcell.py</a>  
 Модуль для чтения базы данных из таблиц  
 > 
-### <a id="config">Registration.py</a>
+### <a id="json">Registration.py</a>
 Модуль для регистрации пользователей и записи их в JSON файл 
 
 #### reg_init(base_name :str)  
@@ -69,4 +69,4 @@ data
 запрос - то по чему мы будем искать 
 
 
-### <a id="config">main.py</a>  
+### <a id="main">main.py</a>  
