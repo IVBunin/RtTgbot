@@ -10,11 +10,11 @@ data
 +---+Директория для json файла регистрации  
 +--+logs  
 +---+Директория для логов работы  
-+-+[config.py](###config)  
-+-+[GPT.py](#GPT)     
-+-+[main.py](#main)   
-+-+[readexcel.py](#excell)  
-+-+[registration.py](#json)    
++-+[config.py](###configpy)  
++-+[GPT.py](#GPTpy)     
++-+[main.py](#mainpy)   
++-+[readexcel.py](#readexcelpy)  
++-+[registration.py](#registrationpy)    
  
 
 Список используемых библиотек:
