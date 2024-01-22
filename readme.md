@@ -14,7 +14,7 @@ data
 +-+[GPT.py](#GPT)     
 +-+[main.py](#main)   
 +-+[readexcel.py](#excell)  
-+-+[registration.py модуль](#json)    
++-+[registration.py](#json)    
  
 
 Список используемых библиотек:
