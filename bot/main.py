@@ -43,6 +43,7 @@ async def send_welcome(message):
 @bot.message_handler(func=lambda message: True)
 async def reg(message):
     try:
+        await bot.send_message(message.chat.id, text = " ".join(serch_in_db(message.text, 0)))
         match (message.text):
             case ("тарифы, акции и услуги"):
                 await bot.send_message(message.chat.id, text = "Введите тариф")

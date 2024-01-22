@@ -8,7 +8,7 @@ def serch_in_db( address: str, option : int):
             mkdir("data/")
         wbask = load_workbook(filename="bot/data/sheets/Заявки.xlsx")
         wbask = wbask["Лист1"]
-        wbsell = load_workbook(filename= "data/sheets/Продажи.xlsx")
+        wbsell = load_workbook(filename= "bot/data/sheets/Продажи.xlsx")
         wbsell = wbsell['Лист1']
         answer =[]
         match (option):
@@ -16,14 +16,17 @@ def serch_in_db( address: str, option : int):
                 # тут мы ищем в базе адрес и возвращаем тариф
                 for i in range(1, wbsell.max_row+1):
                     if address == wbsell["E" + str(i)].value:
-                        answer.append(str(wbsell["F" + str(i)].value))
-                    elif i == wbsell.max_row :return answer # колонка с тарифом
+                        if wbsell["F"+str(i)].value != None:
+                            answer.append(wbsell["F" + str(i)].value)
+                            answer.append("\n")
+                    elif i == wbsell.max_row : return answer # колонка с тарифом
             case (1):
                 # тут мы выводим список тарифов
                 return 'Void'
         # end match   
-    except:
-        return 1
+    except Exception as e:
+        print(e)
+        return e
 def allinfo(pc : int):
     try:
         if not(path.isdir("data/")):

@@ -78,6 +78,3 @@ def debug(base_name):
     data = json.load(base)
     print(data)
 
-
-reg_init("test")
-debug("test")
