@@ -10,11 +10,11 @@ data
 +---+Директория для json файла регистрации  
 +--+logs  
 +---+Директория для логов работы  
-+-+[config.py](config)  
-+-+[GPT.py](GPT)     
-+-+[main.py](main)   
-+-+[readexcel.py](excell)  
-+-+[registration.py модуль](json)    
++-+[config.py](###config)  
++-+[GPT.py](###GPT)     
++-+[main.py](###main)   
++-+[readexcel.py](###excell)  
++-+[registration.py модуль](###json)    
  
 
 Список используемых библиотек:
@@ -42,7 +42,7 @@ data
 Создаеь json файл с указалным названием.  
 Принимает на вход строку 
 
-#### clear_reg(password :str , base_name :str, clear_all = False.  
+#### clear_reg(password :str , base_name :str, clear_all = False) 
 Функция для удаления базы регистрации.
 Принимает на вход  
 - пароль
