@@ -24,18 +24,18 @@ data
 |  |   |
 
 
-### <a id="config">Config.py</a>  
+### <a id="configpy">Config.py</a>  
 Конфигурационный файл в котором храняться глобальные неизменяемые константы
 > token - токен телеграм бота  
 > master_password - пароль используемый для отладочных действий  
 > _LOCAL_PATH_ - путь для коректного чтения и сохранения файлов 
-### <a id="GPT">GPT.py</a>  
+### <a id="GPTpy">GPT.py</a>  
 Модуль для интеграции ChatGPT3.5 
 >
-### <a id="excell">Readexcell.py</a>  
+### <a id="readexcelpy">Readexcell.py</a>  
 Модуль для чтения базы данных из таблиц  
 > 
-### <a id="json">Registration.py</a>
+### <a id="registrationpy">Registration.py</a>
 Модуль для регистрации пользователей и записи их в JSON файл 
 
 #### reg_init(base_name :str)  
@@ -69,4 +69,4 @@ data
 запрос - то по чему мы будем искать 
 
 
-### <a id="main">main.py</a>  
+### <a id="mainpy">main.py</a>  
