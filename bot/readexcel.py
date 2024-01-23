@@ -1,7 +1,7 @@
 from os import mkdir
 from os import path
 from openpyexcel import load_workbook
-
+from numpy import unique
 def serch_in_db( address: str, option : int):
     try:
         if not(path.isdir("data/")):
@@ -22,7 +22,12 @@ def serch_in_db( address: str, option : int):
                     elif i == wbsell.max_row : return answer # колонка с тарифом
             case (1):
                 # тут мы выводим список тарифов
-                return 'Void'
+                answer = set()
+                for i in range(1, wbsell.max_row+1):
+                    if wbsell["C" + str(i)].value != None:
+                        answer.add(wbsell["C" + str(i)].value)                
+                return list(answer)
+  
         # end match   
     except Exception as e:
         print(e)
@@ -72,3 +77,5 @@ def allinfo(pc : int):
     except Exception as e:
         print(e)
         return e
+    
+print(serch_in_db("Партизанск г.,Пушкинская,72А,9", 1))
