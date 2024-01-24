@@ -2,6 +2,7 @@ from os import mkdir
 from os import path
 from openpyexcel import load_workbook
 from numpy import unique
+from registration import *
 def serch_in_db( address: str, option : int):
     try:
         if not(path.isdir("data/")):
@@ -26,6 +27,13 @@ def serch_in_db( address: str, option : int):
                 for i in range(1, wbsell.max_row+1):
                     if wbsell["C" + str(i)].value != None:
                         answer.add(wbsell["C" + str(i)].value)                
+                return list(answer)
+            case (2):
+                # тут мы выводим список тарифов
+                answer = set()
+                for i in range(1, wbsell.max_row+1):
+                    if wbsell["C" + str(i)].value != None:
+                        answer.add(wbsell["R" + str(i)].value)                
                 return list(answer)
   
         # end match   
@@ -78,4 +86,5 @@ def allinfo(pc : int):
         print(e)
         return e
     
-print(serch_in_db("Партизанск г.,Пушкинская,72А,9", 1))
+
+

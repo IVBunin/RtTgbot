@@ -29,11 +29,9 @@ def send_welcome(message):
     try:
         #Кнопки 
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        btn0 = types.KeyboardButton('тарифы, акции и услуги')
-        btn1 = types.KeyboardButton('Возможность до адреса')
         btn2 = types.KeyboardButton('Регистрация')
-        markup.add(btn0, btn1,btn2)
-        bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот компании Ростелеком, в нем вы можете проверить возможность до адреса и узнать о тарифах".format(message.from_user),reply_markup=markup)
+        markup.add(btn2)
+        bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот помошник в продажах. Пожалйста, пройдите регистрацию".format(message.from_user),reply_markup=markup)
     except ApiTelegramException as e:
         print(e)
         
@@ -50,16 +48,36 @@ def reg(message):
                 bot.send_message(message.chat.id, text = "Введите адрес в формате \"Уссурийск г.,Выгонная,16,121\" ")
                 bot.register_next_step_handler(message, reanswer_serch)
             case ("Регистрация"):
-                register_user(basename,message.from_user.first_name, str(message.chat.id))
-                bot.send_message(message.chat.id, text = "Вы зарегистрированны")
+                bot.send_message(message.chat.id, text = "Введите ваше фио по образцу 'Фамилия Имя Отчество' ")
+                bot.register_next_step_handler(message, registration_c)
+
     except ApiTelegramException as e:
         print(e)
 
+
 def reanswer_serch(message):
-    answer = serch_in_db(message.text,0)
-    if answer == [] or answer == None or answer == 'Void':
-        bot.send_message(message.chat.id, "По вашему адресу не обнаружены тарифы, проверьте правильность написания")
-    else:bot.send_message(message.chat.id, ("Вам предоставлены следующие тарифы:\n") + " ".join(answer))
+    try:
+        answer = serch_in_db(message.text,0)
+        if answer == [] or answer == None or answer == 'Void':
+            bot.send_message(message.chat.id, "По вашему адресу не обнаружены тарифы, проверьте правильность написания")
+        else:bot.send_message(message.chat.id, ("Вам предоставлены следующие тарифы:\n") + " ".join(answer))
+    except ApiTelegramException as e:
+        print(e)
+
+
+def registration_c(message):
+    try:
+        names = get_keys(basename)
+        if message.text in names:
+            register_user(basename,message.text,message.chat.id)
+            bot.send_message(message.chat.id, "Вы зарегистрированны")
+        else: 
+            bot.send_message(message.chat.id, "Вас нет в списке")
+    except ApiTelegramException as e:
+        print(e)
+
+
+
 
 if __name__ == "__main__":
     basename = str(datetime.today())
@@ -67,6 +85,10 @@ if __name__ == "__main__":
     for i in range(len(char)):
         basename= basename.replace(char[i],'_')
     reg_init(basename)
+
+    reg_list =  serch_in_db(" ", 2)
+    for i in range(len(reg_list)):
+        register_user(basename, reg_list[i] , "")
     bot.polling(non_stop=True)
 
     

@@ -73,8 +73,22 @@ def get_from_reg( base_name :str, type_ :str, request :str):
         return e
 
 
+
+def get_keys( base_name :str):
+    try:
+        base = open(f"bot/data/base/{base_name}.json", "r")
+        data = json.load(base)
+        keys = []
+        keys = list(data["items"].keys())
+        return  keys
+    except Exception as e :
+        return e
+
+
 def debug(base_name):
     base = open(f"bot/data/base/{base_name}.json", "r")
     data = json.load(base)
-    print(data)
+
+
+
 
