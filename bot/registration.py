@@ -28,7 +28,7 @@ def clear_reg(password :str , base_name :str, clear_all = False):
         if password == config.master_password:
             match(clear_all):
                 case(False):
-                    remove(f'bot/data/base/{base_name + ".json"}')
+                    remove(f'bot/data/base/{base_name}')
                     return 0
                 case (True):
                     rmtree(f"bot/data/base/")
@@ -40,10 +40,10 @@ def clear_reg(password :str , base_name :str, clear_all = False):
 #регистрация пользователя
 def register_user( base_name :str, user_name :str, chat_id:str):
     try:
-        base = open(f"bot/data/base/{base_name}.json", "r")
+        base = open(f"bot/data/base/{base_name}", "r")
         data = json.load(base)
         base.close
-        base = open(f"bot/data/base/{base_name}.json", "w")
+        base = open(f"bot/data/base/{base_name}", "w")
         data["items"][user_name] = chat_id
         json.dump(data, base)
         base.close
@@ -57,7 +57,7 @@ def register_user( base_name :str, user_name :str, chat_id:str):
 def get_from_reg( base_name :str, type_ :str, request :str):
     try:
 
-        base = open(f"bot/data/base/{base_name}.json", "r")
+        base = open(f"bot/data/base/{base_name}", "r")
         data = json.load(base)
         
         match (type_):
@@ -76,7 +76,7 @@ def get_from_reg( base_name :str, type_ :str, request :str):
 
 def get_keys( base_name :str):
     try:
-        base = open(f"bot/data/base/{base_name}.json", "r")
+        base = open(f"bot/data/base/{base_name}", "r")
         data = json.load(base)
         keys = []
         keys = list(data["items"].keys())
@@ -86,7 +86,7 @@ def get_keys( base_name :str):
 
 
 def debug(base_name):
-    base = open(f"bot/data/base/{base_name}.json", "r")
+    base = open(f"bot/data/base/{base_name}", "r")
     data = json.load(base)
 
 
