@@ -71,7 +71,7 @@ def registration_c(message):
         names = get_keys(basename)
         if message.text in names:
             register_user(basename,message.text,message.chat.id)
-            
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             btn1 = types.KeyboardButton("тарифы, акции и услуги")
             btn2= types.KeyboardButton("Возможность до адреса")
             markup.add(btn1,btn2)
