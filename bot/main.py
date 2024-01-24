@@ -30,7 +30,7 @@ def send_welcome(message):
     try:
         #Кнопки 
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        btn2 = types.KeyboardButton('Регистрация')
+        btn0 = types.KeyboardButton('Регистрация')
         markup.add(btn2)
         bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот помошник в продажах. Пожалйста, пройдите регистрацию".format(message.from_user),reply_markup=markup)
     except ApiTelegramException as e:
@@ -71,7 +71,11 @@ def registration_c(message):
         names = get_keys(basename)
         if message.text in names:
             register_user(basename,message.text,message.chat.id)
-            bot.send_message(message.chat.id, "Вы зарегистрированны")
+            
+            btn1 = types.KeyboardButton("тарифы, акции и услуги")
+            btn2= types.KeyboardButton("Возможность до адреса")
+            markup.add(btn1,btn2)
+            bot.send_message(message.chat.id, "Вы зарегистрированны",reply_markup=markup)
         else: 
             bot.send_message(message.chat.id, "Вас нет в списке")
     except ApiTelegramException as e:
