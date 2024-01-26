@@ -2,19 +2,14 @@
 
 
 ## Структура директории
->bot
-data  
-+--+sheets  
-+---+Директория для таблица баз данны
-+--+base  
-+---+Директория для json файла регистрации  
-+--+logs  
-+---+Директория для логов работы  
-+-+[config.py](###configpy)  
-+-+[GPT.py](#GPTpy)     
-+-+[main.py](#mainpy)   
-+-+[readexcel.py](#readexcelpy)  
-+-+[registration.py](#registrationpy)    
+bot/data/sheets - Директория для таблица баз данны\
+/base - Директория для json файла регистрации  
+/logs - Директория для логов работы  
+[config.py](###configpy)  
+[GPT.py](#GPTpy)     
+[main.py](#mainpy)   
+[readexcel.py](#readexcelpy)  
+[registration.py](#registrationpy)    
  
 
 ## Список используемых библиотек  
@@ -47,12 +42,19 @@ data
 >
 ### <a id="readexcelpy">Readexcell.py</a>  
 Модуль для чтения базы данных из таблиц  
+#### def serch_in_db( address: str, option : int):
+Функция поиска по базе данных. При разных параметрах возвращает разные значения.
+- 0 Поиск услуг по базе
+- 1 Поиск всех тарифов по базе
+- 2 Поиск всех сотрудников
+#### def allinfo(pc : int):
+Функция в стадии разработки 
 > 
 ### <a id="registrationpy">Registration.py</a>
 Модуль для регистрации пользователей и записи их в JSON файл 
 
 #### reg_init(base_name :str)  
-Создаеь json файл с указалным названием.  
+Создает json файл с указаным названием.  
 Принимает на вход строку 
 
 #### clear_reg(password :str , base_name :str, clear_all = False) 
@@ -89,3 +91,4 @@ data
  
 
 ### <a id="mainpy">main.py</a>  
+Основной модуль. Много букв.

@@ -76,7 +76,7 @@ def get_from_reg( base_name :str, type_ :str, request :str):
 
 def get_keys( base_name :str):
     try:
-        base = open(f"data/base/{base_name}", "r")
+        base = open(f"bot/data/base/{base_name}", "r")
         data = json.load(base)
         keys = []
         keys = list(data["items"].keys())

@@ -35,7 +35,6 @@ def send_welcome(message):
         bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот помошник в продажах. Пожалйста, пройдите регистрацию".format(message.from_user),reply_markup=markup)
     except ApiTelegramException as e:
         print(e)
-        
 
 #Выбор функциональных групп 
 @bot.message_handler(func=lambda message: True)
@@ -51,7 +50,9 @@ def reg(message):
             case ("Регистрация"):
                 bot.send_message(message.chat.id, text = "Введите ваше фио по образцу 'Фамилия Имя Отчество' ")
                 bot.register_next_step_handler(message, registration_c)
-
+            case("Рассылка"):
+                bot.send_message(message.chat.id, 'Отправьте сообщение для рассылки.\n Вы можете отменить рассылку отправив \"Отмена\"')
+                bot.register_next_step_handler(message,send_messages)
     except ApiTelegramException as e:
         print(e)
 
@@ -80,24 +81,38 @@ def registration_c(message):
             bot.send_message(message.chat.id, "Вас нет в списке")
     except ApiTelegramException as e:
         print(e)
-
-
+      
+def send_messages(message):
+    try:
+        if (message.text).lower == 'отмена':
+            base = open(f"bot/data/base/{basename}", "r")
+            data = json.load(base)
+            for key,value in data["items"].items():
+                if value != (str() or None): 
+                    bot.forward_message(value, message.chat.id, message.message_id)
+            bot.send_message(message.chat.id, "Отработал")
+        else: bot.send_message(message.chat.id, "Рассылка отменена 👍")
+    except ApiTelegramException as e:
+        print(e)
 
 
 if __name__ == "__main__":
-    if not listdir("data/base/"):
+    if not listdir("bot/data/base/"):
         basename = str(datetime.today())
         char = [':','.','+',' ']
         for i in range(len(char)):
             basename= basename.replace(char[i],'_')
         reg_init(basename)
         
-    for file_name in listdir("data/base/"):
+        for file_name in listdir("bot/data/base/"):
+                basename = str(file_name)
+                basename = basename 
+        reg_list =  serch_in_db(" ", 2)
+        for i in range(len(reg_list)):
+            register_user(basename, reg_list[i] , "")
+    for file_name in listdir("bot/data/base/"):
             basename = str(file_name)
-            basename = basename 
-    reg_list =  serch_in_db(" ", 2)
-    for i in range(len(reg_list)):
-        register_user(basename, reg_list[i] , "")
+
     bot.polling(non_stop=True)
 
     
