@@ -31,7 +31,7 @@ def send_welcome(message):
         #Кнопки 
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn0 = types.KeyboardButton('Регистрация')
-        markup.add(btn2)
+        markup.add(btn0)
         bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот помошник в продажах. Пожалйста, пройдите регистрацию".format(message.from_user),reply_markup=markup)
     except ApiTelegramException as e:
         print(e)
@@ -85,14 +85,14 @@ def registration_c(message):
 
 
 if __name__ == "__main__":
-    if not listdir("bot/data/base/"):
+    if not listdir("data/base/"):
         basename = str(datetime.today())
         char = [':','.','+',' ']
         for i in range(len(char)):
             basename= basename.replace(char[i],'_')
         reg_init(basename)
         
-    for file_name in listdir("bot/data/base/"):
+    for file_name in listdir("data/base/"):
             basename = str(file_name)
             basename = basename 
     reg_list =  serch_in_db(" ", 2)

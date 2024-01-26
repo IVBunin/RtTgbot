@@ -7,9 +7,9 @@ def serch_in_db( address: str, option : int):
     try:
         if not(path.isdir("data/")):
             mkdir("data/")
-        wbask = load_workbook(filename="bot/data/sheets/Заявки.xlsx")
+        wbask = load_workbook(filename="data/sheets/Заявки.xlsx")
         wbask = wbask["Лист1"]
-        wbsell = load_workbook(filename= "bot/data/sheets/Продажи.xlsx")
+        wbsell = load_workbook(filename= "data/sheets/Продажи.xlsx")
         wbsell = wbsell['Лист1']
         answer =[]
         match (option):
@@ -44,9 +44,9 @@ def allinfo(pc : int):
     try:
         if not(path.isdir("data/")):
             mkdir("data/")
-        wbask = load_workbook(filename="C:\\Users\\Александр\\Documents\\GitHub\\RtTgbot\\data\\Заявки.xlsx")
+        wbask = load_workbook(filename="data/sheets/Заявки.xlsx")
         wbask = wbask["Лист1"]
-        wbsell = load_workbook(filename= "C:\\Users\\Александр\\Documents\\GitHub\\RtTgbot\\data\\Продажи.xlsx")
+        wbsell = load_workbook(filename= "data/sheets/Продажи.xlsx")
         wbsell = wbsell['Лист1']
         class info:
             def __init__(self) -> None:
