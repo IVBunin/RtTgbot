@@ -20,8 +20,20 @@ data
 ## Список используемых библиотек  
 | Название бибиотеки | Версия |
 | ----------- | ----------- |
-|  |   |
-|  |   |
+| certifi          |  2023.11.17|
+|charset-normalizer |3.3.2|
+|et-xmlfile         |1.1.0|
+|idna               |3.6|
+|jdcal             | 1.4.1|
+|numpy              |1.26.3|
+|openpyexcel        |2.5.14|
+|pip                |23.2.1|
+|pyTelegramBotAPI  | 4.15.3|
+|requests           |2.31.0|
+|setuptools         |65.5.0|
+|telebot           |0.0.5|
+|urllib3           | 2.1.0 |
+
 
 
 ## Модули
