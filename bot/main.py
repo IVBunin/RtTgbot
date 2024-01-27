@@ -97,20 +97,20 @@ def send_messages(message):
 
 
 if __name__ == "__main__":
-    if not listdir("bot/data/base/"):
+    if not listdir("data/base/"):
         basename = str(datetime.today())
         char = [':','.','+',' ']
         for i in range(len(char)):
             basename= basename.replace(char[i],'_')
         reg_init(basename)
         
-        for file_name in listdir("bot/data/base/"):
+        for file_name in listdir("data/base/"):
                 basename = str(file_name)
                 basename = basename 
         reg_list =  serch_in_db(" ", 2)
         for i in range(len(reg_list)):
             register_user(basename, reg_list[i] , "")
-    for file_name in listdir("bot/data/base/"):
+    for file_name in listdir("data/base/"):
             basename = str(file_name)
 
     bot.polling(non_stop=True)
