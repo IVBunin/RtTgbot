@@ -5,11 +5,11 @@ from numpy import unique
 from registration import *
 def serch_in_db( address: str, option : int):
     try:
-        if not(path.isdir("data/")):
-            mkdir("data/")
-        wbask = load_workbook(filename="data/sheets/Заявки.xlsx")
+        if not(path.isdir("bot/data/")):
+            mkdir("bot/data/")
+        wbask = load_workbook(filename="bot/data/sheets/Заявки.xlsx")
         wbask = wbask["Лист1"]
-        wbsell = load_workbook(filename= "data/sheets/Продажи.xlsx")
+        wbsell = load_workbook(filename= "bot/data/sheets/Продажи.xlsx")
         wbsell = wbsell['Лист1']
         answer =[]
         match (option):
@@ -86,5 +86,22 @@ def allinfo(pc : int):
         print(e)
         return e
     
-
-
+def ask_answer(fio : str):
+    try:
+        if not(path.isdir("bot/data/")):
+            mkdir("bot/data/")
+        wbask = load_workbook(filename="bot/data/sheets/Заявки.xlsx")
+        wbask = wbask["Лист1"]
+        answer = []
+        for i in range(1, wbask.max_row+10):
+                if fio == wbask["A" + str(i)].value:
+                    answer.append(wbask["E" + str(i)].value + "\n")
+                    answer.append("Статус - " + str(wbask["I" + str(i)].value) + "\n")
+                    answer.append("Услуги в заявке - " + str(wbask["F" + str(i)].value) + "\n")
+                    answer.append("Дата - " + str(wbask["J" + str(i)].value)[:10] + "\n")
+                    answer.append("\n")
+                elif i == wbask.max_row : return answer 
+        
+    except Exception as e:
+            print(e)
+            return e

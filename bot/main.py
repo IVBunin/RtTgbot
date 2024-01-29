@@ -7,7 +7,7 @@ from telebot import types
 from telebot.apihelper import ApiTelegramException
 from datetime import datetime
 from os import listdir
-
+import g4f
 #самописные библиотеки импортируем польностью 
 from registration import * 
 from readexcel import *
@@ -53,9 +53,25 @@ def reg(message):
             case("Рассылка"):
                 bot.send_message(message.chat.id, 'Отправьте сообщение для рассылки.\n Вы можете отменить рассылку отправив \"Отмена\"')
                 bot.register_next_step_handler(message,send_messages)
+            case("Мои заявки"):
+                bot.send_message(message.chat.id, "Вот все ваши заявки:\n"+"".join(ask_answer(get_from_reg(basename, "chat_id", message.chat.id))))
+            case("Скучно"):
+                bot.send_message(message.chat.id, "Что бы вы хотели узнать у всезнающего оракула?")
+                bot.register_next_step_handler(message, chatwgpt)
     except ApiTelegramException as e:
         print(e)
 
+def chatwgpt(message):
+    try:
+        response = g4f.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": message.text}],
+            provider=g4f.Provider.ChatBase,   
+        )
+        chat_gpt_response = response
+        bot.send_message(message.chat.id, chat_gpt_response)
+    except ApiTelegramException as e:
+        print(e)
 
 def reanswer_serch(message):
     try:
@@ -75,7 +91,8 @@ def registration_c(message):
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             btn1 = types.KeyboardButton("тарифы, акции и услуги")
             btn2= types.KeyboardButton("Возможность до адреса")
-            markup.add(btn1,btn2)
+            btn3= types.KeyboardButton("Мои заявки")
+            markup.add(btn1,btn2,btn3)
             bot.send_message(message.chat.id, "Вы зарегистрированны",reply_markup=markup)
         else: 
             bot.send_message(message.chat.id, "Вас нет в списке")
@@ -84,11 +101,11 @@ def registration_c(message):
       
 def send_messages(message):
     try:
-        if (message.text).lower == 'отмена':
+        if message.text != 'Отмена':
             base = open(f"bot/data/base/{basename}", "r")
             data = json.load(base)
             for key,value in data["items"].items():
-                if value != (str() or None): 
+                if value != str(): 
                     bot.forward_message(value, message.chat.id, message.message_id)
             bot.send_message(message.chat.id, "Отработал")
         else: bot.send_message(message.chat.id, "Рассылка отменена 👍")
@@ -97,20 +114,20 @@ def send_messages(message):
 
 
 if __name__ == "__main__":
-    if not listdir("data/base/"):
+    if not listdir("bot/data/base/"):
         basename = str(datetime.today())
         char = [':','.','+',' ']
         for i in range(len(char)):
-            basename= basename.replace(char[i],'_')
+           basename= basename.replace(char[i],'_')
         reg_init(basename)
         
-        for file_name in listdir("data/base/"):
+        for file_name in listdir("bot/data/base/"):
                 basename = str(file_name)
                 basename = basename 
         reg_list =  serch_in_db(" ", 2)
         for i in range(len(reg_list)):
             register_user(basename, reg_list[i] , "")
-    for file_name in listdir("data/base/"):
+    for file_name in listdir("bot/data/base/"):
             basename = str(file_name)
 
     bot.polling(non_stop=True)

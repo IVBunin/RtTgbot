@@ -11,8 +11,8 @@ import json
 # создание файла базы
 def reg_init(base_name :str):
     try:
-        if not(path.isdir("data/base/")):
-            mkdir("data/base/")
+        if not(path.isdir("bot/data/base/")):
+            mkdir("bot/data/base/")
         data = {"items": {}}
         base = open(f"data/base/{base_name}.json", "w")
         json.dump(data, base)
@@ -40,7 +40,7 @@ def clear_reg(password :str , base_name :str, clear_all = False):
 #регистрация пользователя
 def register_user( base_name :str, user_name :str, chat_id:str):
     try:
-        base = open(f"data/base/{base_name}", "r")
+        base = open(f"bot/data/base/{base_name}", "r")
         data = json.load(base)
         base.close
         base = open(f"data/base/{base_name}", "w")
@@ -57,7 +57,7 @@ def register_user( base_name :str, user_name :str, chat_id:str):
 def get_from_reg( base_name :str, type_ :str, request :str):
     try:
 
-        base = open(f"data/base/{base_name}", "r")
+        base = open(f"bot/data/base/{base_name}", "r")
         data = json.load(base)
         
         match (type_):
@@ -76,7 +76,7 @@ def get_from_reg( base_name :str, type_ :str, request :str):
 
 def get_keys( base_name :str):
     try:
-        base = open(f"data/base/{base_name}", "r")
+        base = open(f"bot/data/base/{base_name}", "r")
         data = json.load(base)
         keys = []
         keys = list(data["items"].keys())
@@ -86,7 +86,7 @@ def get_keys( base_name :str):
 
 
 def debug(base_name):
-    base = open(f"data/base/{base_name}", "r")
+    base = open(f"bot/data/base/{base_name}", "r")
     data = json.load(base)
 
 
