@@ -3,7 +3,7 @@ from os import mkdir
 from os import path
 from os import remove
 from config import master_password
-import config
+import config as cfg
 import json
 
 
@@ -11,10 +11,10 @@ import json
 # создание файла базы
 def reg_init(base_name :str):
     try:
-        if not(path.isdir("bot/data/base/")):
-            mkdir("bot/data/base/")
+        if not(path.isdir(cfg._LOCAL_BASE_PATH_)):
+            mkdir(cfg._LOCAL_BASE_PATH_)
         data = {"items": {}}
-        base = open(f"data/base/{base_name}.json", "w")
+        base = open(cfg._LOCAL_BASE_PATH_ + base_name + ".json", "w")
         json.dump(data, base)
         base.close
         return 0
@@ -25,13 +25,13 @@ def reg_init(base_name :str):
 #удаление файла базы 
 def clear_reg(password :str , base_name :str, clear_all = False):
     try:
-        if password == config.master_password:
+        if password == cfg.master_password:
             match(clear_all):
                 case(False):
-                    remove(f'data/base/{base_name}')
+                    remove(cfg._LOCAL_BASE_PATH_ + base_name)
                     return 0
                 case (True):
-                    rmtree(f"data/base/")
+                    rmtree(cfg._LOCAL_BASE_PATH_)
                     return 1 
     except Exception as e:
         return e
@@ -40,10 +40,10 @@ def clear_reg(password :str , base_name :str, clear_all = False):
 #регистрация пользователя
 def register_user( base_name :str, user_name :str, chat_id:str):
     try:
-        base = open(f"bot/data/base/{base_name}", "r")
+        base = open(cfg._LOCAL_BASE_PATH_ + base_name, "r")
         data = json.load(base)
         base.close
-        base = open(f"data/base/{base_name}", "w")
+        base = open(cfg._LOCAL_BASE_PATH_ + base_name, "w")
         data["items"][user_name] = chat_id
         json.dump(data, base)
         base.close
@@ -57,7 +57,7 @@ def register_user( base_name :str, user_name :str, chat_id:str):
 def get_from_reg( base_name :str, type_ :str, request :str):
     try:
 
-        base = open(f"bot/data/base/{base_name}", "r")
+        base = open(cfg._LOCAL_BASE_PATH_ + base_name, "r")
         data = json.load(base)
         
         match (type_):
@@ -76,7 +76,7 @@ def get_from_reg( base_name :str, type_ :str, request :str):
 
 def get_keys( base_name :str):
     try:
-        base = open(f"bot/data/base/{base_name}", "r")
+        base = open(cfg._LOCAL_BASE_PATH_ + base_name, "r")
         data = json.load(base)
         keys = []
         keys = list(data["items"].keys())
@@ -86,7 +86,7 @@ def get_keys( base_name :str):
 
 
 def debug(base_name):
-    base = open(f"bot/data/base/{base_name}", "r")
+    base = open(cfg._LOCAL_BASE_PATH_ + base_name, "r")
     data = json.load(base)
 
 

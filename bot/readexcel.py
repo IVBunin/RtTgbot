@@ -1,52 +1,71 @@
-from os import mkdir
-from os import path
 from openpyexcel import load_workbook
-from numpy import unique
 from registration import *
-def serch_in_db( address: str, option : int):
+import config as cfg
+
+def serch_in_db( address: str): # функция тарифов по адресу
     try:
-        if not(path.isdir("bot/data/")):
-            mkdir("bot/data/")
-        wbask = load_workbook(filename="bot/data/sheets/Заявки.xlsx")
-        wbask = wbask["Лист1"]
-        wbsell = load_workbook(filename= "bot/data/sheets/Продажи.xlsx")
+        wbsell = load_workbook(filename= cfg._LOCAL_PATH_ + "/sheets/Продажи.xlsx")
         wbsell = wbsell['Лист1']
         answer =[]
-        match (option):
-            case (0):
-                # тут мы ищем в базе адрес и возвращаем тариф
-                for i in range(1, wbsell.max_row+1):
-                    if address == wbsell["E" + str(i)].value:
-                        if wbsell["F"+str(i)].value != None:
-                            answer.append(wbsell["F" + str(i)].value)
-                            answer.append("\n")
-                    elif i == wbsell.max_row : return answer # колонка с тарифом
-            case (1):
-                # тут мы выводим список тарифов
-                answer = set()
-                for i in range(1, wbsell.max_row+1):
-                    if wbsell["C" + str(i)].value != None:
-                        answer.add(wbsell["C" + str(i)].value)                
-                return list(answer)
-            case (2):
-                # тут все люди
-                answer = set()
-                for i in range(1, wbsell.max_row+1):
-                    if wbsell["C" + str(i)].value != None:
-                        answer.add(wbsell["R" + str(i)].value)                
-                return list(answer)
-  
-        # end match   
+        for i in range(1, wbsell.max_row+1): # тут мы ищем в базе адрес и возвращаем тариф
+            if address == wbsell["E" + str(i)].value:
+                if wbsell["F"+str(i)].value != None:
+                    answer.append(wbsell["F" + str(i)].value)
+                    answer.append("\n")
+            elif i == wbsell.max_row : return answer
     except Exception as e:
         print(e)
         return e
-def allinfo(pc : int):
+    
+def all_options():
     try:
-        if not(path.isdir("data/")):
-            mkdir("data/")
-        wbask = load_workbook(filename="data/sheets/Заявки.xlsx")
+        wbsell = load_workbook(filename= cfg._LOCAL_PATH_ + "/sheets/Продажи.xlsx")
+        wbsell = wbsell['Лист1']
+        answer = set()
+        for i in range(1, wbsell.max_row+1):
+            if wbsell["C" + str(i)].value != None:
+                answer.add(wbsell["C" + str(i)].value)                
+        return list(answer)  
+    except Exception as e:
+        print(e)
+        return e
+    
+def find_all_people(): # Запись всех людей в список
+    try:
+        wbsell = load_workbook(filename= cfg._LOCAL_PATH_ + "/sheets/Продажи.xlsx")
+        wbsell = wbsell['Лист1']
+        answer = set()
+        for i in range(1, wbsell.max_row+1):
+            if wbsell["C" + str(i)].value != None:
+                answer.add(wbsell["R" + str(i)].value)                
+        return list(answer)
+    except Exception as e:
+        print(e)
+        return e
+
+def ask_answer(fio : str): #Вывод информации по заявке
+    try:
+        wbask = load_workbook(filename=cfg._LOCAL_PATH_ + "/sheets/Заявки.xlsx")
         wbask = wbask["Лист1"]
-        wbsell = load_workbook(filename= "data/sheets/Продажи.xlsx")
+        answer = []
+        for i in range(1, wbask.max_row+10):
+                if fio == wbask["A" + str(i)].value:
+                    answer.append(wbask["E" + str(i)].value + "\n")
+                    answer.append("Статус - " + str(wbask["I" + str(i)].value) + "\n")
+                    answer.append("Услуги в заявке - " + str(wbask["F" + str(i)].value) + "\n")
+                    answer.append("Дата - " + str(wbask["J" + str(i)].value)[:10] + "\n")
+                    answer.append("\n")
+                elif i == wbask.max_row : return answer 
+        
+    except Exception as e:
+            print(e)
+            return e
+
+def allinfo(pc : int): #Ужас нерабочий
+    try:
+        wbask = load_workbook(filename= cfg._LOCAL_PATH_ + "/sheets/Заявки.xlsx")
+        wbask = wbask["Лист1"]
+        wbsell = load_workbook(filename= cfg._LOCAL_PATH_ + "/sheets/Продажи.xlsx")
         wbsell = wbsell['Лист1']
         class info:
             def __init__(self) -> None:
@@ -86,22 +105,3 @@ def allinfo(pc : int):
         print(e)
         return e
     
-def ask_answer(fio : str):
-    try:
-        if not(path.isdir("bot/data/")):
-            mkdir("bot/data/")
-        wbask = load_workbook(filename="bot/data/sheets/Заявки.xlsx")
-        wbask = wbask["Лист1"]
-        answer = []
-        for i in range(1, wbask.max_row+10):
-                if fio == wbask["A" + str(i)].value:
-                    answer.append(wbask["E" + str(i)].value + "\n")
-                    answer.append("Статус - " + str(wbask["I" + str(i)].value) + "\n")
-                    answer.append("Услуги в заявке - " + str(wbask["F" + str(i)].value) + "\n")
-                    answer.append("Дата - " + str(wbask["J" + str(i)].value)[:10] + "\n")
-                    answer.append("\n")
-                elif i == wbask.max_row : return answer 
-        
-    except Exception as e:
-            print(e)
-            return e

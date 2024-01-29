@@ -26,7 +26,7 @@ bot = telebot.TeleBot(cfg._TOKEN_)
 
 
 @bot.message_handler(commands=['help', 'start'])
-def send_welcome(message):
+def send_welcome(message): # Старт бота
     try:
         #Кнопки 
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
@@ -35,14 +35,13 @@ def send_welcome(message):
         bot.send_message(message.chat.id,text = "Добрый день {0.first_name}, это - телеграм бот помошник в продажах. Пожалйста, пройдите регистрацию".format(message.from_user),reply_markup=markup)
     except ApiTelegramException as e:
         print(e)
-
-#Выбор функциональных групп 
-@bot.message_handler(func=lambda message: True)
-def reg(message):
+ 
+@bot.message_handler(func=lambda message: True) 
+def reg(message): #Функциональный блок
     try:
         match (message.text):
             case ("тарифы, акции и услуги"):
-                answer = serch_in_db(message.text,1)
+                answer = all_options()
                 bot.send_message(message.chat.id, ("Вот все существующие тарифы:\n") + "\n".join(answer))
             case ("Возможность до адреса"):
                 bot.send_message(message.chat.id, text = "Введите адрес в формате \"Уссурийск г.,Выгонная,16,121\" ")
@@ -61,29 +60,7 @@ def reg(message):
     except ApiTelegramException as e:
         print(e)
 
-def chatwgpt(message):
-    try:
-        response = g4f.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": message.text}],
-            provider=g4f.Provider.ChatBase,   
-        )
-        chat_gpt_response = response
-        bot.send_message(message.chat.id, chat_gpt_response)
-    except ApiTelegramException as e:
-        print(e)
-
-def reanswer_serch(message):
-    try:
-        answer = serch_in_db(message.text,0)
-        if answer == [] or answer == None or answer == 'Void':
-            bot.send_message(message.chat.id, "По вашему адресу не обнаружены тарифы, проверьте правильность написания")
-        else:bot.send_message(message.chat.id, ("Вам предоставлены следующие тарифы:\n") + " ".join(answer))
-    except ApiTelegramException as e:
-        print(e)
-
-
-def registration_c(message):
+def registration_c(message): #Блок после регистрации
     try:
         names = get_keys(basename)
         if message.text in names:
@@ -98,11 +75,39 @@ def registration_c(message):
             bot.send_message(message.chat.id, "Вас нет в списке")
     except ApiTelegramException as e:
         print(e)
-      
-def send_messages(message):
+        bot.send_message("Что-то сломалось")
+        return e
+
+def chatwgpt(message): #ChatGPT partly integration
+    try:
+        response = g4f.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": message.text}],
+            provider=g4f.Provider.ChatBase,   
+        )
+        chat_gpt_response = response
+        bot.send_message(message.chat.id, chat_gpt_response)
+    except ApiTelegramException as e:
+        print(e)
+        bot.send_message("Что-то сломалось")
+        return e
+
+def reanswer_serch(message): #Возможность до адреса
+    try:
+        answer = serch_in_db(message.text)
+        if answer == [] or answer == None or answer == 'Void':
+            bot.send_message(message.chat.id, "По вашему адресу не обнаружены тарифы, проверьте правильность написания")
+        else:bot.send_message(message.chat.id, ("Вам предоставлены следующие тарифы:\n") + " ".join(answer))
+    except ApiTelegramException as e:
+        print(e)
+        bot.send_message("Что-то сломалось")
+        return e
+
+
+def send_messages(message): #Рассылка
     try:
         if message.text != 'Отмена':
-            base = open(f"bot/data/base/{basename}", "r")
+            base = open(cfg._LOCAL_BASE_PATH_ + basename, "r")
             data = json.load(base)
             for key,value in data["items"].items():
                 if value != str(): 
@@ -111,23 +116,25 @@ def send_messages(message):
         else: bot.send_message(message.chat.id, "Рассылка отменена 👍")
     except ApiTelegramException as e:
         print(e)
+        bot.send_message("Что-то сломалось")
+        return e
 
 
-if __name__ == "__main__":
-    if not listdir("bot/data/base/"):
+if __name__ == "__main__": # Создание базы
+    if not listdir(cfg._LOCAL_BASE_PATH_):
         basename = str(datetime.today())
         char = [':','.','+',' ']
         for i in range(len(char)):
            basename= basename.replace(char[i],'_')
         reg_init(basename)
         
-        for file_name in listdir("bot/data/base/"):
+        for file_name in listdir(cfg._LOCAL_BASE_PATH_):
                 basename = str(file_name)
                 basename = basename 
-        reg_list =  serch_in_db(" ", 2)
+        reg_list =  find_all_people()
         for i in range(len(reg_list)):
             register_user(basename, reg_list[i] , "")
-    for file_name in listdir("bot/data/base/"):
+    for file_name in listdir(cfg._LOCAL_BASE_PATH_):
             basename = str(file_name)
 
     bot.polling(non_stop=True)
