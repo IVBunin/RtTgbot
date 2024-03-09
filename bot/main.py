@@ -7,11 +7,11 @@ from telebot import types
 from telebot.apihelper import ApiTelegramException
 from datetime import datetime
 from os import listdir
-import g4f
+
 #самописные библиотеки импортируем польностью 
 from registration import * 
 from readexcel import *
-
+from GPT import *
 
 #модули для дебага 
 from time import sleep
@@ -54,10 +54,12 @@ def reg(message): #Функциональный блок
                 bot.register_next_step_handler(message,send_messages)
             case("Мои заявки"):
                 bot.send_message(message.chat.id, "Вот все ваши заявки:\n"+"".join(ask_answer(get_from_reg(basename, "chat_id", message.chat.id))))
-                bot.register_next_step_handler(message, applications) # Вот тут строчку вставили🫦🫦💅💅💅
-            case("Скучно"):
+            case("Обращение к оракулу"):
                 bot.send_message(message.chat.id, "Что бы вы хотели узнать у всезнающего оракула?")
                 bot.register_next_step_handler(message, chatwgpt)
+            case("Статистика"):
+                bot.send_message(message.chat.id, "Для получения информации о СЦ, введите имя СЦ в формате \"СЦ Северо-Восточный\"\nО вас: \n" + str(done_requests(get_from_reg(basename,"chat_id",message.chat.id))))
+                bot.register_next_step_handler(message, infograph)
     except ApiTelegramException as e:
         print(e)
 
@@ -70,7 +72,9 @@ def registration_c(message): #Блок после регистрации
             btn1 = types.KeyboardButton("тарифы, акции и услуги")
             btn2= types.KeyboardButton("Возможность до адреса")
             btn3= types.KeyboardButton("Мои заявки")
-            markup.add(btn1,btn2,btn3)
+            btn4= types.KeyboardButton("Обращение к оракулу")
+            btn5 = types.KeyboardButton("Статистика")
+            markup.add(btn1,btn2,btn3,btn4,btn5)
             bot.send_message(message.chat.id, "Вы зарегистрированны",reply_markup=markup)
         else: 
             bot.send_message(message.chat.id, "Вас нет в списке")
@@ -79,15 +83,21 @@ def registration_c(message): #Блок после регистрации
         bot.send_message("Что-то сломалось")
         return e
 
-def chatwgpt(message): #ChatGPT partly integration
+def infograph(message):
     try:
-        response = g4f.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": message.text}],
-            provider=g4f.Provider.ChatBase,   
-        )
-        chat_gpt_response = response
-        bot.send_message(message.chat.id, chat_gpt_response)
+        answer = alldone_requests(message.text)
+        if answer == [] or answer == None or answer == 'Void':
+            bot.send_message(message.chat.id, "Ваш СЦ не обнаружен, проверьте правильность написания")
+        else:bot.send_message(message.chat.id, "Вот количество выполненных задач по отделу:\n" + " ".join(answer))
+    except ApiTelegramException as e:
+        print(e)
+        bot.send_message("Что-то сломалось")
+        return e
+
+def chatwgpt(message): #Т.к. токен не работает, было решено добавить "игру"
+    try:
+        bot.send_message(message.chat.id,"Вот все говорят: " + message.text + "\nА ты купи слона.")
+        #bot.send_message(askGPT(message.text)) 
     except ApiTelegramException as e:
         print(e)
         bot.send_message("Что-то сломалось")
@@ -98,19 +108,7 @@ def reanswer_serch(message): #Возможность до адреса
         answer = serch_in_db(message.text)
         if answer == [] or answer == None or answer == 'Void':
             bot.send_message(message.chat.id, "По вашему адресу не обнаружены тарифы, проверьте правильность написания")
-        else:bot.send_message(message.chat.id, ("Вам предоставлены следующие тарифы:\n") + " ".join(answer))
-    except ApiTelegramException as e:
-        print(e)
-        bot.send_message("Что-то сломалось")
-        return e
-
-def applications(message): # Вот эту штучку сделали👄👄👄❤️❤️❤️
-    try:
-        answer = done_requests(message.text)
-        if answer == [] or answer == None or answer == 'Void':
-            bot.send_message(message.chat.id, "По вашему имени не обнаружены заявки")
-        else:
-            bot.send_message(message.chat.id, ("У вас выполнены следующие завяки:\n") + " ".join(answer))
+        else:bot.send_message(message.chat.id, "Вам предоставлены следующие тарифы:\n" + " ".join(answer))
     except ApiTelegramException as e:
         print(e)
         bot.send_message("Что-то сломалось")

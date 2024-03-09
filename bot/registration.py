@@ -73,7 +73,6 @@ def get_from_reg( base_name :str, type_ :str, request :str):
         return e
 
 
-
 def get_keys( base_name :str):
     try:
         base = open(cfg._LOCAL_BASE_PATH_ + base_name, "r")

@@ -37,10 +37,15 @@ def find_all_people(): # Запись всех людей в список
     try:
         wbsell = load_workbook(filename= cfg._LOCAL_PATH_ + "/sheets/Продажи.xlsx")
         wbsell = wbsell['Лист1']
+        wbask = load_workbook(filename= cfg._LOCAL_PATH_ + "/sheets/Заявки.xlsx")
+        wbask = wbask['Лист1']
         answer = set()
         for i in range(1, wbsell.max_row+1):
-            if wbsell["C" + str(i)].value != None:
-                answer.add(wbsell["R" + str(i)].value)                
+            if wbsell["R" + str(i)].value != None:
+                answer.add(wbsell["R" + str(i)].value)  
+        for i in range(1, wbask.max_row+1): 
+            if wbask["A" + str(i)].value != None:
+                answer.add(wbask["A" + str(i)].value)             
         return list(answer)
     except Exception as e:
         print(e)
@@ -63,6 +68,73 @@ def ask_answer(fio : str): #Вывод информации по заявке
     except Exception as e:
             print(e)
             return e
+
+def done_requests(agent_name : str): #Выполненные задачи на одного человека
+    try:
+        wb = load_workbook(filename=cfg._LOCAL_PATH_ + "/sheets/Заявки.xlsx")
+        ws = wb["Лист1"]
+
+        construction_total = 0
+        service_connected_total = 0
+        kn_total = 0
+        deferred_total = 0
+        refusal_total = 0
+        total_requests_total = 0
+
+        for row in ws.iter_rows(min_row=2):
+            agent = row[0].value
+
+            if agent.lower() == agent_name.lower():
+                construction_total += row[12].value
+                service_connected_total += row[13].value
+                kn_total += row[14].value
+                deferred_total += row[15].value
+                refusal_total += row[16].value
+                total_requests_total += row[17].value
+        answer = f"Агент: {agent_name}, Стройка: {construction_total}, Услуга подключена: {service_connected_total}, КН: {kn_total}, Отложенная: {deferred_total}, Отказ: {refusal_total}, Всего: {total_requests_total}"
+        return answer
+
+    except Exception as e:
+        print(e)
+        return e
+def peopleforalldone_requests(agent_name : str): # Вспомогательная функция для добавления сотрудников в инфографику
+    try:
+        wb = load_workbook(filename=cfg._LOCAL_PATH_ + "/sheets/Заявки.xlsx")
+        ws = wb["Лист1"]
+        total_requests_total = 0
+        answer= [1,1] #инициализировал список
+        for row in ws.iter_rows(min_row=2):
+            agent = row[0].value
+            if agent.lower() == agent_name.lower():
+                total_requests_total += row[17].value
+                answer[0] = f"{agent_name} - {total_requests_total}"
+                answer[1] = total_requests_total
+        return answer
+
+    except Exception as e:
+        print(e)
+        return e
+
+def alldone_requests(department:str): # Вывод инфографики по отделу
+    try:
+        wb = load_workbook(filename=cfg._LOCAL_PATH_ + "/sheets/Заявки.xlsx")
+        ws = wb["Лист1"]
+        answ_list = []
+        total_amount = 0
+        for row in ws.iter_rows(min_row=2):
+            dep = row[1].value
+            if dep.lower() == department.lower():
+                got = peopleforalldone_requests(row[0].value)
+                if got[0] not in answ_list:
+                    answ_list.append(got[0])
+                    answ_list.append("\n")
+                    total_amount +=got[1]
+        answ_list.append("Всего выполнено задач - " + str(total_amount))
+        return answ_list
+
+    except Exception as e:
+        print(e)
+        return e
 
 def allinfo(pc : int): #Ужас нерабочий
     try:
@@ -104,36 +176,6 @@ def allinfo(pc : int): #Ужас нерабочий
             pass
         num = info()
         num.data
-    except Exception as e:
-        print(e)
-        return e
-
-
-def done_requests(agent_name):
-    try:
-        wb = load_workbook(filename=cfg._LOCAL_PATH_ + "Заявки.xlsx")
-        ws = wb["Лист1"]
-
-        construction_total = 0
-        service_connected_total = 0
-        kn_total = 0
-        deferred_total = 0
-        refusal_total = 0
-        total_requests_total = 0
-
-        for row in ws.iter_rows(min_row=2, values_only=True):
-            agent = row[0]
-
-            if agent.lower() == agent_name.lower():
-                construction_total += row[12]
-                service_connected_total += row[13]
-                kn_total += row[14]
-                deferred_total += row[15]
-                refusal_total += row[16]
-                total_requests_total += row[17]
-
-        print(f"Агент: {agent_name}, Стройка: {construction_total}, Услуга подключена: {service_connected_total}, КН: {kn_total}, Отложенная: {deferred_total}, Отказ: {refusal_total}, Всего: {total_requests_total}")
-
     except Exception as e:
         print(e)
         return e
