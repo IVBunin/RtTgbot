@@ -1,0 +1,36 @@
+* {
+  margin: 0px;
+}
+
+.hat {
+  background-color: #6F74FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.h_but {
+  height: 147px;
+  font-size: 32px;
+  color: #FFFFFF;
+  background-color: #6F74FF;
+  border: 0;
+  transition: 0.3s linear;
+}
+
+.h_but:hover {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+#hb1 {
+  width: 443px;
+}
+
+#hb2 {
+  width: 480px;
+}
+
+#hb3 {
+  width: 360px;
+}
