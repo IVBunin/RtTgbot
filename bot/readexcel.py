@@ -2,6 +2,9 @@ from openpyexcel import load_workbook
 from registration import *
 import config as cfg
 
+
+
+
 def serch_in_db( address: str): # функция тарифов по адресу
     try:
         wbsell = load_workbook(filename= cfg._LOCAL_PATH_ + "/sheets/Продажи.xlsx")
@@ -104,4 +107,33 @@ def allinfo(pc : int): #Ужас нерабочий
     except Exception as e:
         print(e)
         return e
-    
+
+
+def done_requests(agent_name):
+    try:
+        wb = load_workbook(filename=cfg._LOCAL_PATH_ + "Заявки.xlsx")
+        ws = wb["Лист1"]
+
+        construction_total = 0
+        service_connected_total = 0
+        kn_total = 0
+        deferred_total = 0
+        refusal_total = 0
+        total_requests_total = 0
+
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            agent = row[0]
+
+            if agent.lower() == agent_name.lower():
+                construction_total += row[12]
+                service_connected_total += row[13]
+                kn_total += row[14]
+                deferred_total += row[15]
+                refusal_total += row[16]
+                total_requests_total += row[17]
+
+        print(f"Агент: {agent_name}, Стройка: {construction_total}, Услуга подключена: {service_connected_total}, КН: {kn_total}, Отложенная: {deferred_total}, Отказ: {refusal_total}, Всего: {total_requests_total}")
+
+    except Exception as e:
+        print(e)
+        return e

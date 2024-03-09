@@ -54,6 +54,7 @@ def reg(message): #Функциональный блок
                 bot.register_next_step_handler(message,send_messages)
             case("Мои заявки"):
                 bot.send_message(message.chat.id, "Вот все ваши заявки:\n"+"".join(ask_answer(get_from_reg(basename, "chat_id", message.chat.id))))
+                bot.register_next_step_handler(message, applications) # Вот тут строчку вставили🫦🫦💅💅💅
             case("Скучно"):
                 bot.send_message(message.chat.id, "Что бы вы хотели узнать у всезнающего оракула?")
                 bot.register_next_step_handler(message, chatwgpt)
@@ -103,6 +104,17 @@ def reanswer_serch(message): #Возможность до адреса
         bot.send_message("Что-то сломалось")
         return e
 
+def applications(message): # Вот эту штучку сделали👄👄👄❤️❤️❤️
+    try:
+        answer = done_requests(message.text)
+        if answer == [] or answer == None or answer == 'Void':
+            bot.send_message(message.chat.id, "По вашему имени не обнаружены заявки")
+        else:
+            bot.send_message(message.chat.id, ("У вас выполнены следующие завяки:\n") + " ".join(answer))
+    except ApiTelegramException as e:
+        print(e)
+        bot.send_message("Что-то сломалось")
+        return e
 
 def send_messages(message): #Рассылка
     try:

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/head_style.css">
+    <link rel="stylesheet" href="assets/bot_set_style.css">
+    <title>Главная страница</title>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+          event.preventDefault(); // Предотвращаем обычное поведение отправки формы
+
+          var formData = new FormData();
+          var fileInput = document.getElementById('fileInput');
+          formData.append('file', fileInput.files[0]); // Получаем файл из input
+
+          // Отправляем файл на сервер
+          fetch('./bot/data/sheets/', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => {
+            if (response.ok) {
+              alert('Файл успешно загружен на сервер');
+            } else {
+              alert('Ошибка загрузки файла на сервер');
+            }
+          })
+          .catch(error => console.error('Ошибка:', error));
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="hat">
+      <img src="assets\logo.svg">
+      <a href="an_page.html"><button type="button" class="h_but" id="hb1">аналитика</button></a>
+      <img src="assets\Line.svg">
+      <a href="user_set_page.html"><button type="button" class="h_but" id="hb2">управление пользователями</button></a>
+      <img src="assets\Line.svg">
+      <a href="bot_set_page.html"><button type="button" class="h_but" id="hb3">управление ботом</button></a>
+    </div>
+    <div class="main_cont">
+      <button type="button" class="but" id="b1">создать новость</button>
+      <button type="button" class="but" id="b2">создать опрос</button>
+      <form id="uploadForm" enctype="multipart/form-data" action="php/upload.php" method="POST">
+        <input type="file" id="fileInput" name="fileInput">
+        <button type="submit" class="but" id="b3">загрузка файла</button>
+       </form>
+      <a href=".\bot\data\base\2024-01-24_17_02_14_383697.json" download>
+        <button type="button" class="but" id="b4">выгрузка базы пользователей в формате json файла</button>
+      </a>
+    </div>
+  </body>
+</html>
