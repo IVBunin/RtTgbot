@@ -5,16 +5,12 @@ import telebot
 import config as cfg
 from telebot import types
 from telebot.apihelper import ApiTelegramException
-from datetime import datetime
 from os import listdir
 
 #самописные библиотеки импортируем польностью 
 from registration import * 
 from readexcel import *
-from GPT import *
 
-#модули для дебага 
-from time import sleep
 
 #^^^^
 
@@ -132,10 +128,7 @@ def send_messages(message): #Рассылка
 
 if __name__ == "__main__": # Создание базы
     if not listdir(cfg._LOCAL_BASE_PATH_):
-        basename = str(datetime.today())
-        char = [':','.','+',' ']
-        for i in range(len(char)):
-           basename= basename.replace(char[i],'_')
+        basename = str("base")
         reg_init(basename)
         
         for file_name in listdir(cfg._LOCAL_BASE_PATH_):

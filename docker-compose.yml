@@ -1,11 +1,13 @@
 version: "3"
 
 services:
-  web:
+  bot:
     build: .
     container_name: RTK_bot
-    command: python /bot/main.py
+    command: 
+          python /bot/main.py
+          sh -c "python manage.py runserver 0.0.0.0:8000"
     ports:
-      - 80:80
+       - "8000:8000"
     volumes:
       - ./:/app
