@@ -3,11 +3,9 @@ version: "3"
 services:
   bot:
     build: .
-    container_name: RTK_bot
-    command: 
-          python /bot/main.py
-          sh -c "python manage.py runserver 0.0.0.0:8000"
+    restart: on-failure 
+    command: python /bot/main.py 
     ports:
-       - "8000:8000"
+       - "5000:8000"
     volumes:
       - ./:/app
