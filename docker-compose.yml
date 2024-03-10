@@ -4,7 +4,7 @@ services:
   web:
     build: .
     container_name: RTK_bot
-    command: python main.py
+    command: python /bot/main.py
     ports:
       - 80:80
     volumes:

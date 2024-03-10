@@ -43,10 +43,11 @@
     <div class="main_cont">
       <button type="button" class="but" id="b1">создать новость</button>
       <button type="button" class="but" id="b2">создать опрос</button>
-      <form id="uploadForm" enctype="multipart/form-data" action="php/upload.php" method="POST">
-        <input type="file" id="fileInput" name="fileInput">
+      <form id="uploadForm" enctype="multipart/form-data" action="{% url 'upload_file' %}" method="POST">
+        {% csrf_token %}
+        <input type="file" id="fileInput" name="file">
         <button type="submit" class="but" id="b3">загрузка файла</button>
-       </form>
+      </form>
       <a href=".\bot\data\base\2024-01-24_17_02_14_383697.json" download>
         <button type="button" class="but" id="b4">выгрузка базы пользователей в формате json файла</button>
       </a>
