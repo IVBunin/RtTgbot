@@ -11,3 +11,4 @@ telebot==            0.0.5
 urllib3==            2.1.0
 g4f==               0.2.2.8
 flask==             3.0.2
+gunicorn==          21.2.0s

@@ -6,7 +6,6 @@ import config as cfg
 from telebot import types
 from telebot.apihelper import ApiTelegramException
 from os import listdir
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import os
 
 
@@ -21,11 +20,7 @@ from readexcel import *
 
                                                                                       
 bot = telebot.TeleBot(cfg._TOKEN_)
-app = Flask(__name__)
 
-UPLOAD_FOLDER = "/app/bot/data/base/base.json"
-DOWNLOAD_FOLDER= "/app/bot/data/sheets"
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message): # Старт бота
@@ -98,7 +93,7 @@ def infograph(message):
 
 def chatwgpt(message): #Т.к. токен не работает, было решено добавить "игру"
     try:
-        if message.text == NoneType: bot.send_message(message.chat.id, "Оракул не принимает визуальные образы")
+        if message.text == None: bot.send_message(message.chat.id, "Оракул не принимает визуальные образы")
         else:
             bot.send_message(message.chat.id,"Вот все говорят: " + message.text + "\nА ты купи слона.")
         #bot.send_message(askGPT(message.text)) 
@@ -134,42 +129,7 @@ def send_messages(message): #Рассылка
         return e
 
 
-@app.route('/download_base')
-def download_base():
-    filename = 'base.json'
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
-
-@app.route('/an_page')
-def an_page():
-    return render_template('an_page.html')
-
-
-@app.route('/bot_set_page')
-def bot_set_page():
-    return render_template('bot_set_page.html')
-
-
-@app.route('/user_set_page')
-def user_set_page():
-    return render_template('user_set_page.html')
-
-
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if 'file' not in request.files:
-        return redirect(request.url)
-
-    file = request.files['file']
-
-    if file.filename == '':
-        return redirect(request.url)
-
-    if file:
-        filename = os.path.join(app.config['DOWNLOAD_FOLDER'], file.filename)
-        file.save(filename)
-        # You can perform additional processing or redirect to another page if needed
-        return redirect(url_for('an_page'))
 
         
 
@@ -187,7 +147,7 @@ if __name__ == "__main__": # Создание базы
             register_user(basename, reg_list[i] , "")
     for file_name in listdir(cfg._LOCAL_BASE_PATH_):
             basename = str(file_name)
-    app.run(host='0.0.0.0')
+    create_app()
     bot.polling(non_stop=True)
-
+    
     
