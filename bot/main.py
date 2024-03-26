@@ -57,6 +57,9 @@ def reg(message): #Функциональный блок
             case("Статистика"):
                 bot.send_message(message.chat.id, "Для получения информации о СЦ, введите имя СЦ в формате \"СЦ Северо-Восточный\"\nО вас: \n" + str(done_requests(get_from_reg(basename,"chat_id",message.chat.id))))
                 bot.register_next_step_handler(message, infograph)
+            case("Обратная связь"):
+                bot.send_message(message.chat.id, "Отправьте следующим сообщением текст для обратной связи. \n Вы можете отменить это действие отправив\"Отмена\"")
+                bot.register_next_step_handler(message,backansw)
     except ApiTelegramException as e:
         print(e)
 
@@ -71,13 +74,25 @@ def registration_c(message): #Блок после регистрации
             btn3= types.KeyboardButton("Мои заявки")
             btn4= types.KeyboardButton("Обращение к оракулу")
             btn5 = types.KeyboardButton("Статистика")
-            markup.add(btn1,btn2,btn3,btn4,btn5)
+            btn6 = types.KeyboardButton("Обратная связь")
+            markup.add(btn1,btn2,btn3,btn4,btn5,btn6)
             bot.send_message(message.chat.id, "Вы зарегистрированны",reply_markup=markup)
         else: 
             bot.send_message(message.chat.id, "Вас нет в списке")
     except ApiTelegramException as e:
         print(e)
         bot.send_message("Что-то сломалось")
+        return e
+
+def backansw(message):
+    try:
+        if message.text != 'Отмена':
+            base = open(cfg._LOCAL_BASE_PATH_ + "Обратная_связь.txt", "a")
+            base.write(get_from_reg(basename, type_="chat_id", request= message.chat.id) +" : " + message.text)
+            bot.send_message(message.chat.id, "Отработал")
+            base.close()
+        else: bot.send_message(message.chat.id, "Рассылка отменена 👍")
+    except ApiTelegramException as e:
         return e
 
 def infograph(message):
