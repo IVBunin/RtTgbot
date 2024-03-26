@@ -162,7 +162,7 @@ if __name__ == "__main__": # Создание базы
             register_user(basename, reg_list[i] , "")
     for file_name in listdir(cfg._LOCAL_BASE_PATH_):
             basename = str(file_name)
-    create_app()
+   # create_app()
     bot.polling(non_stop=True)
     
     
