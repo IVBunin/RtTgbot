@@ -144,11 +144,6 @@ def send_messages(message): #Рассылка
         return e
 
 
-
-
-        
-
-
 if __name__ == "__main__": # Создание базы
     if not listdir(cfg._LOCAL_BASE_PATH_):
         basename = str("base")
