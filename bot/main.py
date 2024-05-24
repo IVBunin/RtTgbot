@@ -51,15 +51,31 @@ def reg(message): #Функциональный блок
                 bot.register_next_step_handler(message,send_messages)
             case("Мои заявки"):
                 bot.send_message(message.chat.id, "Вот все ваши заявки:\n"+"".join(ask_answer(get_from_reg(basename, "chat_id", message.chat.id))))
-            case("Обращение к оракулу"):
-                bot.send_message(message.chat.id, "Что бы вы хотели узнать у всезнающего оракула?")
-                bot.register_next_step_handler(message, chatwgpt)
             case("Статистика"):
                 bot.send_message(message.chat.id, "Для получения информации о СЦ, введите имя СЦ в формате \"СЦ Северо-Восточный\"\nО вас: \n" + str(done_requests(get_from_reg(basename,"chat_id",message.chat.id))))
                 bot.register_next_step_handler(message, infograph)
             case("Обратная связь"):
                 bot.send_message(message.chat.id, "Отправьте следующим сообщением текст для обратной связи. \n Вы можете отменить это действие отправив\"Отмена\"")
                 bot.register_next_step_handler(message,backansw)
+            case("Мотивация"):
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                btn1 = types.KeyboardButton("АТБ")
+                btn2 = types.KeyboardButton("АФЛ")
+                btn3 = types.KeyboardButton("Отмена")
+                markup.add(btn1,btn2,btn3)
+                bot.send_message(message.chat.id, "Выберите АТБ или АФЛ  \n Вы можете отменить это действие нажав \"Отмена\"",reply_markup=markup)
+                bot.register_next_step_handler(message,motivation)
+            case("Обучение"):
+                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+                btn1 = types.KeyboardButton("Скрипты")
+                btn2 = types.KeyboardButton("Рекомендации")
+                btn3 = types.KeyboardButton("Отмена")
+                markup.add(btn1,btn2,btn3)
+                bot.send_message(message.chat.id, "Выберите Скрипты или Рекомендации  \n Вы можете отменить это действие нажав \"Отмена\"",reply_markup=markup)
+                bot.register_next_step_handler(message,learn)
+            case("Новости"):
+                bot.send_message(message.chat.id, "".join(newstxt()))
+
     except ApiTelegramException as e:
         print(e)
 
@@ -69,13 +85,7 @@ def registration_c(message): #Блок после регистрации
         if message.text in names:
             register_user(basename,message.text,message.chat.id)
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            btn1 = types.KeyboardButton("тарифы, акции и услуги")
-            btn2= types.KeyboardButton("Возможность до адреса")
-            btn3= types.KeyboardButton("Мои заявки")
-            btn4= types.KeyboardButton("Обращение к оракулу")
-            btn5 = types.KeyboardButton("Статистика")
-            btn6 = types.KeyboardButton("Обратная связь")
-            markup.add(btn1,btn2,btn3,btn4,btn5,btn6)
+            returnbuttons(markup)
             bot.send_message(message.chat.id, "Вы зарегистрированны",reply_markup=markup)
         else: 
             bot.send_message(message.chat.id, "Вас нет в списке")
@@ -83,11 +93,47 @@ def registration_c(message): #Блок после регистрации
         print(e)
         bot.send_message("Что-то сломалось")
         return e
+def returnbuttons(markup):
+     btn1 = types.KeyboardButton("тарифы, акции и услуги")
+     btn2= types.KeyboardButton("Возможность до адреса")
+     btn3= types.KeyboardButton("Мои заявки")
+     btn4= types.KeyboardButton("Обращение к оракулу")
+     btn5 = types.KeyboardButton("Статистика")
+     btn6 = types.KeyboardButton("Обратная связь")
+     btn7 = types.KeyboardButton("Мотивация")
+     btn8 = types.KeyboardButton("Обучение")
+     btn9 = types.KeyboardButton("Новости")
+     markup.add(btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9)
+
+def learn(message):
+    try:
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        returnbuttons(markup)
+        if message.text == "Скрипты":
+            bot.send_message(message.chat.id, "".join(writetxt(cfg._LOCAL_LEARN_PATH_ + "script.txt")), reply_markup=markup)
+        if message.text == 'Рекомендации':
+            bot.send_message(message.chat.id, "".join(writetxt(cfg._LOCAL_LEARN_PATH_ + "recomend.txt")),reply_markup=markup)
+        if message.text == 'Отмена': 
+            bot.send_message(message.chat.id, "Продолжим работу?",reply_markup=markup)
+    except ApiTelegramException as e:
+        return e
+def motivation(message):
+    try:
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        returnbuttons(markup)
+        if message.text == "АТБ":
+            bot.send_message(message.chat.id, "".join(writetxt(cfg._LOCAL_MOTIVATION_PATH_ + "atb.txt")), reply_markup=markup)
+        if message.text == 'АФЛ':
+            bot.send_message(message.chat.id, "".join(writetxt(cfg._LOCAL_MOTIVATION_PATH_ + "afl.txt")),reply_markup=markup)
+        if message.text == 'Отмена': 
+            bot.send_message(message.chat.id, "Продолжим работу?",reply_markup=markup)
+    except ApiTelegramException as e:
+        return e
 
 def backansw(message):
     try:
         if message.text != 'Отмена':
-            base = open(cfg._LOCAL_BASE_PATH_ + "Обратная_связь.txt", "a")
+            base = open(cfg._LOCAL_PATH_ + "Обратная_связь.txt", "a")
             base.write(get_from_reg(basename, type_="chat_id", request= message.chat.id) +" : " + message.text)
             bot.send_message(message.chat.id, "Отработал")
             base.close()
@@ -101,17 +147,6 @@ def infograph(message):
         if answer == [] or answer == None or answer == 'Void':
             bot.send_message(message.chat.id, "Ваш СЦ не обнаружен, проверьте правильность написания")
         else:bot.send_message(message.chat.id, "Вот количество выполненных задач по отделу:\n" + " ".join(answer))
-    except ApiTelegramException as e:
-        print(e)
-        bot.send_message("Что-то сломалось")
-        return e
-
-def chatwgpt(message): #Т.к. токен не работает, было решено добавить "игру"
-    try:
-        if message.text == None: bot.send_message(message.chat.id, "Оракул не принимает визуальные образы")
-        else:
-            bot.send_message(message.chat.id,"Вот все говорят: " + message.text + "\nА ты купи слона.")
-        #bot.send_message(askGPT(message.text)) 
     except ApiTelegramException as e:
         print(e)
         bot.send_message("Что-то сломалось")

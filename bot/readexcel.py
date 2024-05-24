@@ -1,7 +1,7 @@
 from openpyexcel import load_workbook
 from registration import *
 import config as cfg
-
+import random
 
 
 
@@ -136,3 +136,16 @@ def alldone_requests(department:str): # Вывод инфографики по �
         print(e)
         return e
 
+def writetxt(path:str): #Текст в сообщение
+    texttosend = []
+    with open(path,'r', encoding='UTF-8') as file:
+        for line in file:
+            texttosend.append(line)
+    return texttosend
+
+def newstxt(): #новость в сообщение
+    texttosend = []
+    with open(cfg._LOCAL_NEWS_PATH_ +"новость " + str(random.randint(1,2)) + ".txt",'r', encoding='UTF-8') as file:
+        for line in file:
+            texttosend.append(line)
+    return texttosend
