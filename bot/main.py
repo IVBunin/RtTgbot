@@ -97,13 +97,12 @@ def returnbuttons(markup):
      btn1 = types.KeyboardButton("тарифы, акции и услуги")
      btn2= types.KeyboardButton("Возможность до адреса")
      btn3= types.KeyboardButton("Мои заявки")
-     btn4= types.KeyboardButton("Обращение к оракулу")
      btn5 = types.KeyboardButton("Статистика")
      btn6 = types.KeyboardButton("Обратная связь")
      btn7 = types.KeyboardButton("Мотивация")
      btn8 = types.KeyboardButton("Обучение")
      btn9 = types.KeyboardButton("Новости")
-     markup.add(btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9)
+     markup.add(btn1,btn2,btn3,btn5,btn6,btn7,btn8,btn9)
 
 def learn(message):
     try:
