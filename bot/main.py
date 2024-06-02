@@ -134,9 +134,9 @@ def backansw(message):
         if message.text != 'Отмена':
             base = open(cfg._LOCAL_PATH_ + "Обратная_связь.txt", "a")
             base.write(get_from_reg(basename, type_="chat_id", request= message.chat.id) +" : " + message.text)
-            bot.send_message(message.chat.id, "Отработал")
+            bot.send_message(message.chat.id, "Благодарим за ваш отзыв")
             base.close()
-        else: bot.send_message(message.chat.id, "Рассылка отменена 👍")
+        else: bot.send_message(message.chat.id, "Ваш отзыв отменён 👍")
     except ApiTelegramException as e:
         return e
 
